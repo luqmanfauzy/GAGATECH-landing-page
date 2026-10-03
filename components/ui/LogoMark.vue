@@ -1,10 +1,25 @@
 <script setup lang="ts">
-withDefaults(defineProps<{ variant?: 'full' | 'mono'; size?: number }>(), { variant: 'full', size: 132 })
+withDefaults(defineProps<{ size?: number }>(), { size: 132 });
 </script>
 <template>
-  <svg :width="size" :height="size * .27" viewBox="0 0 164 44" fill="none" role="img" aria-label="GAGA TECH">
-    <path d="M5 10h17v6H11v14h11v-5h-6v-6h12v17H5zM34 36l9-26h9l9 26h-7l-2-7H42l-2 7zm10-13h6l-3-9zM67 10h17v6H73v14h11v-5h-6v-6h12v17H67zM96 36l9-26h9l9 26h-7l-2-7h-10l-2 7zm10-13h6l-3-9z" fill="currentColor" />
-    <path d="M132 10h26v26h-26z" :fill="variant === 'mono' ? 'currentColor' : '#408A71'" />
-    <path d="M138 16h14v4h-5v10h-4V20h-5z" fill="#091413" />
-  </svg>
+    <span class="logo-frame" :style="{ width: `${size}px` }"
+        ><img
+            :src="'/brand/LOGO-GAGATECH-removebg.png'"
+            class="logo-mark"
+            alt="GAGA TECH"
+    /></span>
 </template>
+
+<style scoped>
+.logo-frame {
+    display: block;
+    max-width: 100%;
+    flex-shrink: 0;
+}
+.logo-mark {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: invert(1);
+}
+</style>

@@ -91,9 +91,9 @@ void main() {
   vec2 cell = mod(gl_FragCoord.xy / u_resolution * u_size, 48.0);
   vec2 pixel = u_size / u_resolution;
   float grid = max(1.0 - step(pixel.x, cell.x), 1.0 - step(pixel.y, cell.y)) * .12;
-  vec3 brand = vec3(15.0, 23.0, 42.0) / 255.0;
-  vec3 mint = vec3(248.0, 250.0, 252.0) / 255.0;
-  vec3 accent = vec3(14.0, 165.0, 233.0) / 255.0;
+  vec3 brand = vec3(10.0) / 255.0;
+  vec3 mint = vec3(1.0);
+  vec3 accent = vec3(163.0) / 255.0;
   vec3 color = mix(mix(mint, brand, u_dark), accent, grid);
   color = mix(color, mix(accent, mint, u_dark), topoLines);
   vec3 axis = normalize(vec3(1.0));
@@ -216,7 +216,7 @@ onBeforeUnmount(() => dispose())
 </template>
 
 <style scoped>
-.topo-field{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden;background-color:#091413;background-image:repeating-radial-gradient(ellipse at 80% 60%,transparent 0 24px,#408a714d 25px 26px,transparent 27px 48px),linear-gradient(#b0e4cc1f 1px,transparent 0),linear-gradient(90deg,#b0e4cc1f 1px,transparent 0);background-size:auto,48px 48px,48px 48px;mask-image:linear-gradient(90deg,transparent 15%,#000)}
-.topo-light{background-color:#b0e4cc}
+.topo-field{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden;background-color:#0a0a0a;background-image:repeating-radial-gradient(ellipse at 80% 60%,transparent 0 24px,#a3a3a34d 25px 26px,transparent 27px 48px),linear-gradient(#ffffff1f 1px,transparent 0),linear-gradient(90deg,#ffffff1f 1px,transparent 0);background-size:auto,48px 48px,48px 48px;mask-image:linear-gradient(90deg,transparent 15%,#0a0a0a)}
+.topo-light{background-color:#ffffff}
 canvas{display:block;width:100%;height:100%}
 </style>

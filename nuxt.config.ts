@@ -8,7 +8,7 @@ export default defineNuxtConfig({
   runtimeConfig: { contactWebhook: '', public: { siteUrl } },
   fonts: { families: [{ name: 'Bricolage Grotesque', provider: 'google' }, { name: 'DM Sans', provider: 'google' }] },
   i18n: { bundle: { optimizeTranslationDirective: false }, defaultLocale: 'en', strategy: 'no_prefix', locales: [{ code: 'en', language: 'en-US', file: 'en.json' }], langDir: '../locales' },
-  app: { head: { htmlAttrs: { lang: 'en' }, title: 'GAGA TECH — when technology makes things easier', meta: [{ name: 'theme-color', content: '#091413' }], link: [{ rel: 'icon', type: 'image/svg+xml', href: '/brand/favicon.svg' }] } },
+  app: { head: { htmlAttrs: { lang: 'en' }, title: 'GAGA TECH — when technology makes things easier', meta: [{ name: 'theme-color', content: '#0a0a0a' }], link: [{ rel: 'icon', type: 'image/svg+xml', href: '/brand/favicon.svg' }] } },
   sitemap: { urls: ['/work/clinical-system', '/work/hospital-portal', '/work/fnb-ordering', '/work/umkm-catalog', '/work/chat', '/work/trading-dashboard'] },
   nitro: { prerender: { routes: ['/'] } },
   typescript: { strict: true }

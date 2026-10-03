@@ -15,7 +15,7 @@ onMounted(() => {
     for (let x = 12; x < width; x += 25) for (let y = 12; y < height; y += 25) {
       const distance = Math.hypot(x - pointer.x, y - pointer.y)
       const force = motion.matches ? 0 : Math.max(0, 1 - distance / 180)
-      ctx.fillStyle = `rgba(64,138,113,${.13 + force * .55})`
+      ctx.fillStyle = `rgba(255,255,255,${.13 + force * .55})`
       ctx.beginPath()
       ctx.arc(x + (x - pointer.x) * force * .12, y + (y - pointer.y) * force * .12, 1 + force * 1.5, 0, Math.PI * 2)
       ctx.fill()

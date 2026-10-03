@@ -1,1 +1,9 @@
-{"nav":{"work":"Work","services":"Services","process":"How we work","contact":"Start a conversation"},"tagline":"when technology makes things easier"}
+{
+  "nav": {
+    "work": "Work",
+    "services": "Services",
+    "process": "How we work",
+    "contact": "Start a conversation"
+  },
+  "tagline": "when technology makes things easier"
+}

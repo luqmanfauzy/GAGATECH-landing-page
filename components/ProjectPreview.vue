@@ -2,7 +2,7 @@
 withDefaults(defineProps<{ kind?: string; title?: string }>(), { kind: 'clinical', title: 'Workspace' })
 </script>
 <template>
-  <div class="project-visual" :class="`visual-${kind}`" aria-hidden="true">
+  <div class="project-visual grayscale" :class="`visual-${kind}`" aria-hidden="true">
     <div class="visual-grid" />
     <div v-if="kind === 'hospital'" class="hospital-art"><div class="art-nav"><b>+ ruangsehat</b><span>Services &nbsp; Doctors &nbsp; About</span><i>Book appointment ↗</i></div><div class="hospital-copy"><small>CARE THAT CONNECTS.</small><h3>Closer care.<br>More compassion.</h3><p>Your health is our priority.</p><b class="art-button">Find doctor ↗</b></div><div class="medical-cross">+</div><div class="hospital-stat"><span>01 / CARE WITHOUT BARRIERS</span><b>Room to<br>feel better.</b></div></div>
     <div v-else-if="kind === 'fnb'" class="food-art"><div class="art-nav"><b>SUAP<span class="food-dot">.</span></b><span>Good food. Good mood.</span><i>Bag (02)</i></div><div class="food-copy"><small>FRESH FROM THE KITCHEN</small><h3>Good things<br>come in bowls.</h3><b class="art-button">Order your bowl ↗</b></div><div class="food-plate"><div class="food-leaf leaf-one" /><div class="food-leaf leaf-two" /><div class="food-rice" /><div class="food-protein" /><div class="food-tomato" /></div><div class="food-bottom">MADE FRESH &nbsp; ✳ &nbsp; MADE FOR YOU &nbsp; ✳ &nbsp; MADE FRESH</div></div>
@@ -11,3 +11,7 @@ withDefaults(defineProps<{ kind?: string; title?: string }>(), { kind: 'clinical
     <span class="mockup-label">{{ title }} / CONCEPT PREVIEW</span>
   </div>
 </template>
+
+<style scoped>
+.grayscale{filter:grayscale(1)}
+</style>

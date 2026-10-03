@@ -2,7 +2,7 @@
 title: Connected clinic, clearer care.
 slug: clinical-system
 category: Web App
-year: '2026'
+year: "2026"
 kind: clinical
 client: Clinic — independent concept
 summary: One place for schedules, patients, and clinic operations.
@@ -14,4 +14,5 @@ result: Visual prototype shows more structured workflow. It has not been impleme
 gallery: [Clinic activity overview, Responsive workspace exploration]
 notice: TODO replace with original project
 ---
+
 Clinic-system concept prioritizing information clarity over complexity. All figures and screens are illustrations, not real medical data.
