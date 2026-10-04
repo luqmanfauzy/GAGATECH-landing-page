@@ -6,7 +6,12 @@ try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' })
   const errors = []
   page.on('pageerror', error => errors.push(error.message))
-  await page.goto(process.env.TEST_URL || 'http://127.0.0.1:3001', { waitUntil: 'networkidle' })
+  const response = await page.goto(process.env.TEST_URL || 'http://127.0.0.1:3001', { waitUntil: 'networkidle' })
+  assert.equal(response.status(), 200)
+  const illustration = page.locator('.hero-illustration')
+  assert.equal(await illustration.getAttribute('src'), '/assets/header.png')
+  assert.ok(await illustration.evaluate(node => node.complete && node.naturalWidth === 1448 && node.naturalHeight === 1086))
+  assert.equal(await illustration.evaluate(node => globalThis.getComputedStyle(node).animationName), 'none')
   await page.getByRole('combobox', { name: 'Filter by year' }).click()
   await page.getByRole('option', { name: '2025', exact: true }).click()
   assert.ok(await page.locator('.project-year').evaluateAll(nodes => nodes.every(node => node.textContent.trim() === '2025')))
@@ -58,6 +63,13 @@ try {
   await page.emulateMedia({ reducedMotion: 'no-preference' })
   for (const width of [1440, 1024, 768, 390, 320]) {
     await page.setViewportSize({ width, height: 900 })
+    await page.locator('.hero').scrollIntoViewIfNeeded()
+    await page.waitForTimeout(900)
+    const copy = await page.locator('.hero-copy').boundingBox()
+    const art = await page.locator('.hero-art').boundingBox()
+    assert.ok(width > 760 ? art.x >= copy.x + copy.width : art.y >= copy.y + copy.height, `Hero layout at ${width}`)
+    assert.ok(art.x >= 0 && art.x + art.width <= width, `Hero image bounds at ${width}`)
+    assert.equal(await illustration.evaluate(node => globalThis.getComputedStyle(node).animationName), 'hero-float')
     for (const selector of ['.hero', '.project-grid', '.contact-grid']) {
       await page.locator(selector).scrollIntoViewIfNeeded()
       assert.ok(await page.evaluate(() => globalThis.document.documentElement.scrollWidth <= globalThis.innerWidth), `Overflow at ${width}: ${selector}`)

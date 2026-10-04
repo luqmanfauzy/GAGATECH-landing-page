@@ -160,7 +160,7 @@ useSeoMeta({
 <template>
     <main id="main">
         <section class="hero wrap">
-            <UiTopoField mode="dark" />
+            <UiTopoField mode="dark" :speed="0" :density="0.5" :opacity="0.25" />
             <div class="hero-top mono">
                 <span
                     ><i class="status-dot" /> AVAILABLE FOR SELECT
@@ -185,12 +185,8 @@ useSeoMeta({
                         <span class="hero-spark" aria-hidden="true"><img :src="'/brand/GAGATECH-just-logo-removebg.png'" alt="" /></span>
                         <div>
                             <p>
-                                We design websites and web applications that<br
-                                    class="desktop-break"
-                                />
-                                work as well as they look. Simpler.<br
-                                    class="desktop-break"
-                                />
+                                We design websites and web applications that
+                                work as well as they look. Simpler.
                                 More useful. More <span>you.</span>
                             </p>
                             <div class="hero-actions">
@@ -204,30 +200,14 @@ useSeoMeta({
                     </div>
                 </div>
                 <div class="hero-art" aria-hidden="true">
-                    <div class="orbit orbit-one" />
-                    <div class="orbit orbit-two" />
-                    <div class="orbit orbit-three" />
-                    <div class="orbit-cross cross-one">+</div>
-                    <div class="orbit-cross cross-two">+</div>
-                    <div class="hero-object">
-                        <div class="object-tile tile-back" />
-                        <div class="object-tile tile-mid" />
-                        <div class="object-tile tile-front">
-                            <svg viewBox="0 0 160 160">
-                                <path
-                                    d="M43 38h74v21H64v58h32V94H78V74h39v64H43z"
-                                    fill="currentColor"
-                                />
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="art-note mono">
-                        LESS COMPLEXITY.<br />MORE POSSIBILITY.
-                    </div>
-                    <div class="code-badge mono">
-                        <i class="status-dot" /> IDEAS INTO INTERFACES
-                        <span>↗</span>
-                    </div>
+                    <img
+                        class="hero-illustration"
+                        :src="'/assets/header.png'"
+                        alt=""
+                        width="1448"
+                        height="1086"
+                        fetchpriority="high"
+                    />
                 </div>
             </div>
             <div class="hero-baseline">

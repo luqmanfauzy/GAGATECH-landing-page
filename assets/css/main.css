@@ -313,8 +313,10 @@ button {
 .hero-main {
     align-items: center;
     display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: clamp(24px, 4vw, 64px);
     min-height: 640px;
+    padding-block: 60px;
 }
 .hero-eyebrow {
     color: #b9b9b9;
@@ -322,7 +324,7 @@ button {
     margin-bottom: 24px;
 }
 .hero h1 {
-    font-size: clamp(4.5rem, 8.7vw, 8.5rem);
+    font-size: clamp(3.5rem, 7.2vw, 7rem);
     letter-spacing: -0.065em;
     line-height: 0.97;
 }
@@ -352,6 +354,7 @@ button {
 .hero-bottom p {
     color: #b2b2b2;
     font-size: 14px;
+    max-width: 38ch;
 }
 .hero-bottom p span {
     color: var(--mint);
@@ -364,101 +367,13 @@ button {
     margin-top: 28px;
 }
 .hero-art {
-    height: 440px;
-    perspective: 1000px;
+    min-width: 0;
     position: relative;
 }
-.orbit {
-    border: 1px solid var(--line);
-    border-radius: 50%;
-    left: 50%;
-    position: absolute;
-    top: 46%;
-    transform: translate(-50%, -50%) rotate(-30deg);
-}
-.orbit-one {
-    height: 370px;
-    width: 370px;
-}
-.orbit-two {
-    height: 220px;
-    width: 470px;
-}
-.orbit-three {
-    height: 450px;
-    width: 260px;
-}
-.orbit-cross {
-    color: var(--accent);
-    font-size: 23px;
-    position: absolute;
-}
-.cross-one {
-    left: 8%;
-    top: 16%;
-}
-.cross-two {
-    bottom: 24%;
-    right: 8%;
-}
-.hero-object {
-    top: 65px;
-    right: 60px;
-    bottom: 80px;
-    left: 60px;
-    position: absolute;
-    transform: rotate(-14deg);
-}
-.object-tile {
-    border: 1px solid #ffffff33;
-    border-radius: 24px;
-    box-shadow: 20px 30px 60px #0005;
-    height: 240px;
-    position: absolute;
-    transform: rotateY(-24deg) rotateX(18deg);
-    width: 220px;
-}
-.tile-back {
-    background: #1c1c1c;
-    left: 80px;
-    top: 0;
-}
-.tile-mid {
-    background: #404040;
-    left: 45px;
-    top: 25px;
-}
-.tile-front {
-    background: linear-gradient(130deg, #666666, #292929);
-    display: grid;
-    left: 10px;
-    place-items: center;
-    top: 50px;
-}
-.tile-front svg {
-    filter: drop-shadow(0 4px 10px #0a0a0a77);
-    width: 150px;
-}
-.art-note {
-    line-height: 1.8;
-    opacity: 0.7;
-    right: 0;
-    top: 8%;
-}
-.art-note,
-.code-badge {
-    font-size: 8px;
-    position: absolute;
-}
-.code-badge {
-    background: var(--bg);
-    border: 1px solid var(--line);
-    bottom: 0;
-    padding: 14px 18px;
-    right: 10%;
-}
-.code-badge span {
-    margin-left: 30px;
+.hero-illustration {
+    display: block;
+    width: 100%;
+    height: auto;
 }
 .hero-baseline {
     align-items: center;
@@ -1735,11 +1650,7 @@ details[open] > summary .service-plus {
         min-height: 580px;
     }
     .hero h1 {
-        font-size: 8.8vw;
-    }
-    .hero-art {
-        transform: scale(0.8);
-        transform-origin: center;
+        font-size: 7.2vw;
     }
     .hero-bottom {
         gap: 15px;
@@ -1900,31 +1811,8 @@ details[open] > summary .service-plus {
         padding: 16px;
     }
     .hero-art {
-        height: 365px;
-        margin: 10px auto 0;
-        max-width: 400px;
-        transform: scale(0.85);
-    }
-    .hero-object {
-        top: 35px;
-        right: 55px;
-        bottom: 60px;
-        left: 55px;
-    }
-    .orbit-one {
-        height: 310px;
-        width: 310px;
-    }
-    .orbit-two {
-        height: 190px;
-        width: 410px;
-    }
-    .orbit-three {
-        height: 350px;
-        width: 220px;
-    }
-    .code-badge {
-        bottom: -5px;
+        margin: 40px auto 0;
+        max-width: 520px;
     }
     .hero-baseline {
         padding-block: 20px 25px;
@@ -2297,11 +2185,6 @@ details[open] > summary .service-plus {
         flex-wrap: wrap;
         gap: 12px;
     }
-    .hero-art {
-        margin-left: -20px;
-        margin-right: -20px;
-        transform: scale(0.75);
-    }
     .hero-baseline {
         gap: 12px;
     }
@@ -2365,7 +2248,13 @@ details[open] > summary .service-plus {
     from { opacity: 0.55; translate: 0 var(--motion-distance, 28px); }
     to { opacity: 1; translate: 0 0; }
 }
+@keyframes hero-float {
+    50% { transform: translateY(-6px); }
+}
 @media (prefers-reduced-motion: no-preference) {
+    .hero-illustration {
+        animation: hero-float 7s ease-in-out infinite;
+    }
     .motion-enter {
         animation: content-enter 700ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--motion-delay, 0ms) backwards;
     }
