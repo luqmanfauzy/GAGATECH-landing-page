@@ -112,7 +112,7 @@ const logo = await readFile(
 );
 const app = await readFile(new URL("../app.vue", import.meta.url), "utf8");
 assert.match(logo, /:src="'\/brand\/LOGO-GAGATECH-removebg\.png'"/);
-assert.match(logo, /width:100%;height:auto/);
+assert.match(logo, /width:\s*100%;\s*height:\s*auto/);
 assert.doesNotMatch(logo, /overflow:hidden|transform:|aspect-ratio:/);
 assert.doesNotMatch(css, /\.brand\s*>\s*span\s*\{/);
 assert.doesNotMatch(footer, /\.footer-grid\s+span\s*\{/);
@@ -121,6 +121,45 @@ assert.match(app, /aria-label="Contact GAGA TECH on WhatsApp"/);
 assert.match(css, /\.floating-wa svg\s*\{[^}]*width: 24px;[^}]*height: 24px;/);
 assert.match(css, /bottom: calc\(15px \+ env\(safe-area-inset-bottom, 0px\)\)/);
 console.log("Logo isolation and WhatsApp layout checks passed");
+
+const pageSource = await readFile(new URL('../pages/index.vue', import.meta.url), 'utf8');
+const contactSource = await readFile(new URL('../components/ContactForm.vue', import.meta.url), 'utf8');
+assert.match(css, /html\s*\{[^}]*scrollbar-width: thin/);
+assert.doesNotMatch(app, /ScrollArea|document\.body\.style\.overflow|function keys/);
+assert.match(app, /<Sheet v-model:open="open">/);
+assert.match(pageSource, /<Select v-model="year">/);
+assert.match(pageSource, /<Accordion type="multiple"/);
+assert.match(contactSource, /<form[^>]*@submit.prevent="submit"/);
+assert.match(contactSource, /<Button[^>]*:disabled="pending"[^>]*type="submit"/);
+console.log('Native scrolling and shadcn integration checks passed');
+
+const motionSource = app.slice(app.indexOf('let disposeMotion'), app.indexOf('const removeStartHook'));
+let callback, change, disconnected = 0;
+const classes = new Set();
+const target = { classList: { add: value => classes.add(value), remove: value => classes.delete(value) }, style: { setProperty() {}, removeProperty() {} }, contains: () => false };
+const query = { matches: false, addEventListener: (_, fn) => { change = fn }, removeEventListener: () => { change = null } };
+const Observer = class {
+  constructor(fn) { callback = fn }
+  observe() {}
+  unobserve() {}
+  disconnect() { disconnected++ }
+};
+const motion = new Function('nextTick', 'document', 'window', 'IntersectionObserver', ts.transpileModule(`${motionSource}\nreturn { startMotion, stopMotion }`, { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText)(
+  async () => {}, { querySelector: () => ({ querySelectorAll: () => [target] }) }, { IntersectionObserver: Observer, matchMedia: () => query }, Observer,
+);
+await motion.startMotion();
+assert.equal(classes.size, 0);
+callback([{ isIntersecting: false, target }]);
+assert.equal(classes.size, 0);
+callback([{ isIntersecting: true, target }]);
+assert.ok(classes.has('motion-enter'));
+query.matches = true;
+change();
+assert.equal(classes.size, 0);
+motion.stopMotion();
+assert.equal(change, null);
+assert.ok(disconnected >= 3);
+console.log('Motion: visible defaults, intersection, reduced motion and cleanup passed');
 
 if (process.argv.includes("--http")) {
   const base = "http://127.0.0.1:4317";
@@ -170,13 +209,12 @@ if (process.argv.includes("--http")) {
     }
     assert.equal((await fetch(`${base}/work/missing-example`)).status, 404);
     for (const asset of [
-      "favicon.svg",
-      "logo-full.svg",
-      "logo-mono.svg",
-      "og.svg",
+      "GAGATECH-just-logo-removebg.png",
+      "LOGO-GAGATECH-removebg.png",
+      "LOGO-GAGATECH.png",
     ])
       assert.equal((await fetch(`${base}/brand/${asset}`)).status, 200, asset);
-    const og = await fetch(`${base}/_ipx/f_png/brand/og.svg`);
+    const og = await fetch(`${base}/brand/LOGO-GAGATECH.png`);
     assert.equal(og.status, 200);
     assert.match(og.headers.get("content-type"), /image\/png/);
     assert.match(

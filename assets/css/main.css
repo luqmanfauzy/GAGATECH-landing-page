@@ -4,6 +4,19 @@
 
 :root {
     color-scheme: dark;
+    --background: 0 0% 4%;
+    --foreground: 0 0% 100%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 4%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 100%;
+    --ui-accent: 0 0% 19%;
+    --accent-foreground: 0 0% 100%;
+    --muted-foreground: 0 0% 65%;
+    --input: 0 0% 30%;
+    --ring: 0 0% 65%;
+    --scrollbar-thumb: #737373;
+    --scrollbar-track: #141414;
     --bg: #0a0a0a;
     --structure: #303030;
     --accent: #a3a3a3;
@@ -24,6 +37,20 @@
 html {
     scroll-behavior: smooth;
     scroll-padding-top: 110px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+html::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+html::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+}
+html::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border: 2px solid var(--scrollbar-track);
+    border-radius: 8px;
 }
 body {
     margin: 0;
@@ -51,16 +78,8 @@ select,
 summary {
     cursor: pointer;
 }
-button {
-    color: inherit;
-}
 button:disabled {
-    cursor: wait;
-    opacity: 0.6;
-}
-button {
-    background: none;
-    border: 0;
+    cursor: not-allowed;
 }
 ::-moz-selection {
     background: var(--mint);
@@ -242,8 +261,7 @@ button {
 .nav-cta span {
     margin-left: 22px;
 }
-.menu-toggle,
-.mobile-menu {
+.menu-toggle {
     display: none;
 }
 .skip-link {
@@ -323,6 +341,13 @@ button {
     color: var(--accent);
     font-size: 47px;
     line-height: 1;
+}
+.hero-spark img {
+    width: 1em;
+    height: 1em;
+    max-width: none;
+    object-fit: contain;
+    filter: invert(1);
 }
 .hero-bottom p {
     color: #b2b2b2;
@@ -538,11 +563,8 @@ button {
     margin-left: 8px;
     opacity: 0.6;
 }
-.year-filter select {
-    background: var(--bg);
-    border: 0;
-    font-size: 11px;
-    padding: 10px;
+.year-filter {
+    flex-shrink: 0;
 }
 .project-grid {
     display: grid;
@@ -1305,18 +1327,17 @@ details[open] > summary .service-plus {
     text-decoration: underline;
     text-underline-offset: 5px;
 }
-.faq-list details:first-child {
+.faq-list {
     border-top: 1px solid var(--line);
 }
-.faq-list summary {
-    align-items: center;
-    display: flex;
-    font-size: 13px;
-    gap: 18px;
-    line-height: 1.5;
-    padding: 24px 0;
+.faq-item {
+    border-bottom: 1px solid var(--line);
 }
-.faq-list summary .mono {
+.faq-list h3 {
+    font-family: inherit;
+    letter-spacing: normal;
+}
+.faq-list .mono {
     font-size: 8px;
     opacity: 0.6;
 }
@@ -1326,6 +1347,15 @@ details[open] > summary .service-plus {
     padding: 0 26px 25px;
 }
 .contact-section {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 4%;
+    --primary: 0 0% 4%;
+    --primary-foreground: 0 0% 100%;
+    --ui-accent: 0 0% 90%;
+    --accent-foreground: 0 0% 4%;
+    --muted-foreground: 0 0% 35%;
+    --input: 0 0% 60%;
+    --ring: 0 0% 25%;
     background: var(--mint);
     color: var(--bg);
     color-scheme: light;
@@ -1401,9 +1431,7 @@ details[open] > summary .service-plus {
 .field label > span {
     color: var(--structure);
 }
-.field input,
-.field select,
-.field textarea {
+.field select {
     background: transparent;
     border: 0;
     border-bottom: 1px solid #40404066;
@@ -1412,20 +1440,6 @@ details[open] > summary .service-plus {
     font-size: 12px;
     padding: 11px 0;
     width: 100%;
-}
-.field input::-moz-placeholder,
-.field textarea::-moz-placeholder {
-    color: #595959;
-    font-size: 11px;
-}
-.field input::placeholder,
-.field textarea::placeholder {
-    color: #595959;
-    font-size: 11px;
-}
-.field textarea {
-    min-height: 94px;
-    resize: vertical;
 }
 .field-error {
     color: #333333;
@@ -1807,8 +1821,8 @@ details[open] > summary .service-plus {
     .site-header {
         height: 80px;
     }
-    .brand svg {
-        width: 128px;
+    .brand .logo-frame {
+        width: 180px !important;
     }
     .desktop-nav,
     .nav-cta {
@@ -1821,17 +1835,9 @@ details[open] > summary .service-plus {
         z-index: 52;
     }
     .mobile-menu {
-        background: var(--bg);
         display: flex;
         flex-direction: column;
-        top: 80px;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        overflow: auto;
-        padding: 35px var(--gutter);
-        position: fixed;
-        z-index: 45;
+        padding-top: 35px;
     }
     .mobile-menu > .eyebrow {
         color: #a3a3a3;
@@ -1988,10 +1994,9 @@ details[open] > summary .service-plus {
     .filter-tabs small {
         display: none;
     }
-    .year-filter select {
-        font-size: 9px;
-        max-width: 103px;
-        padding: 8px 0;
+    .year-filter {
+        font-size: 11px;
+        padding-inline: 8px;
     }
     .project-grid {
         gap: 35px;
@@ -2354,6 +2359,65 @@ details[open] > summary .service-plus {
     }
     .standards-grid h3 {
         font-size: 19px;
+    }
+}
+@keyframes content-enter {
+    from { opacity: 0.55; translate: 0 var(--motion-distance, 28px); }
+    to { opacity: 1; translate: 0 0; }
+}
+@media (prefers-reduced-motion: no-preference) {
+    .motion-enter {
+        animation: content-enter 700ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--motion-delay, 0ms) backwards;
+    }
+    .motion-enter:focus-within {
+        animation: none;
+    }
+    .page-enter-active {
+        transition: opacity 280ms ease, translate 280ms ease;
+    }
+    .page-leave-active {
+        transition: opacity 160ms ease;
+    }
+    .page-enter-from {
+        opacity: 0.65;
+        translate: 0 12px;
+    }
+    .page-leave-to {
+        opacity: 0.65;
+    }
+    .desktop-nav a, .text-link, .case-back {
+        text-decoration: underline;
+        text-decoration-color: transparent;
+        text-underline-offset: 7px;
+        transition: text-decoration-color 200ms;
+    }
+    .desktop-nav a:is(:hover, :focus-visible),
+    .text-link:is(:hover, :focus-visible),
+    .case-back:is(:hover, :focus-visible) {
+        text-decoration-color: currentColor;
+    }
+    .project-open {
+        transition: translate 250ms ease, background 250ms ease;
+    }
+    .project-card:is(:hover, :focus-visible) .project-open {
+        translate: 2px -2px;
+        background: var(--structure);
+    }
+    .project-card:focus-visible .project-visual {
+        transform: scale(1.03);
+    }
+}
+@media (max-width: 760px), (pointer: coarse) {
+    .motion-enter {
+        --motion-distance: 8px;
+        animation-duration: 320ms;
+        animation-delay: 0ms;
+    }
+    .page-enter-active, .page-leave-active {
+        transition-duration: 140ms;
+    }
+    .page-enter-from {
+        translate: none;
     }
 }
 @media (prefers-reduced-motion: reduce) {

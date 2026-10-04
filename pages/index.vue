@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { Button, Select, SelectTrigger, SelectValue, SelectContent, SelectItem, Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "~/components/ui";
 import { useAsyncData, queryContent, useSeoMeta } from "#imports";
 const { data: projects } = await useAsyncData("projects", () =>
     queryContent("/projects").find(),
@@ -181,7 +182,7 @@ useSeoMeta({
                         <em>real<span class="period">.</span></em>
                     </h1>
                     <div class="hero-bottom">
-                        <span class="hero-spark" aria-hidden="true">✳</span>
+                        <span class="hero-spark" aria-hidden="true"><img :src="'/brand/GAGATECH-just-logo-removebg.png'" alt="" /></span>
                         <div>
                             <p>
                                 We design websites and web applications that<br
@@ -193,12 +194,9 @@ useSeoMeta({
                                 More useful. More <span>you.</span>
                             </p>
                             <div class="hero-actions">
-                                <a
-                                    href="#contact"
-                                    class="button mint"
-                                    data-magnetic
-                                    >Discuss your idea <span>↗</span></a
-                                ><a href="#work" class="text-link"
+                                <Button as-child size="lg">
+                                    <a href="#contact" data-magnetic>Discuss your idea <span>↗</span></a>
+                                </Button><a href="#work" class="text-link"
                                     >See explorations <span>↓</span></a
                                 >
                             </div>
@@ -305,7 +303,7 @@ useSeoMeta({
                     role="group"
                     aria-label="Project category"
                 >
-                    <button
+                    <Button
                         v-for="item in [
                             'All',
                             'Website',
@@ -313,21 +311,20 @@ useSeoMeta({
                             'Dashboard',
                         ]"
                         :key="item"
+                        variant="ghost"
                         :class="{ active: category === item }"
                         :aria-pressed="category === item"
                         @click="category = item"
                     >
                         {{ item }} <small v-if="item === 'All'">06</small>
-                    </button>
+                    </Button>
                 </div>
-                <label class="year-filter"
-                    ><span class="sr-only">Filter by year</span
-                    ><select v-model="year">
-                        <option>All years</option>
-                        <option>2026</option>
-                        <option>2025</option>
-                    </select></label
-                >
+                <Select v-model="year">
+                    <SelectTrigger class="year-filter" aria-label="Filter by year"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem v-for="option in ['All years', '2026', '2025']" :key="option" :value="option">{{ option }}</SelectItem>
+                    </SelectContent>
+                </Select>
             </div>
             <p class="sr-only" aria-live="polite">
                 {{ filtered.length }} example projects shown.
@@ -366,14 +363,14 @@ useSeoMeta({
             </div>
             <div v-if="!filtered.length" class="empty-state">
                 No example projects match these filters.
-                <button
+                <Button variant="link"
                     @click="
                         category = 'All';
                         year = 'All years';
                     "
                 >
                     Reset filter ↗
-                </button>
+                </Button>
             </div>
         </section>
         <section id="services" class="services-section section">
@@ -643,16 +640,12 @@ useSeoMeta({
                     >
                 </p>
             </div>
-            <div class="faq-list">
-                <details v-for="(faq, i) in faqs" :key="faq[0]">
-                    <summary>
-                        <span class="mono">0{{ i + 1 }}</span
-                        >{{ faq[0]
-                        }}<span class="service-plus" aria-hidden="true">+</span>
-                    </summary>
-                    <p>{{ faq[1] }}</p>
-                </details>
-            </div>
+            <Accordion type="multiple" class="faq-list">
+                <AccordionItem v-for="(faq, i) in faqs" :key="faq[0]" :value="String(i)" class="faq-item">
+                    <AccordionTrigger><span class="mono">0{{ i + 1 }}</span><span class="flex-1">{{ faq[0] }}</span></AccordionTrigger>
+                    <AccordionContent><p>{{ faq[1] }}</p></AccordionContent>
+                </AccordionItem>
+            </Accordion>
         </section>
         <section id="contact" class="contact-section">
             <div class="wrap contact-grid">
