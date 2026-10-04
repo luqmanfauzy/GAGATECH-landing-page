@@ -1,10 +1,26 @@
 <script setup lang="ts">
 import { computed, ref, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { useMediaQuery } from '@vueuse/core'
+import { Moon, Sun } from 'lucide-vue-next'
 import { Button, Sheet, SheetTrigger, SheetContent, SheetTitle, SheetDescription, SheetClose } from '~/components/ui'
 import { useRoute, useRuntimeConfig, useHead, useSeoMeta, useNuxtApp } from '#imports'
 const route = useRoute()
 const config = useRuntimeConfig()
+const theme = ref('dark')
+const themeReady = ref(false)
+const applyTheme = (value: string | null) => {
+  theme.value = value === 'light' ? 'light' : 'dark'
+  document.documentElement.dataset.theme = theme.value
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme.value === 'light' ? '#ffffff' : '#0a0a0a')
+}
+const toggleTheme = () => {
+  applyTheme(theme.value === 'dark' ? 'light' : 'dark')
+  try { localStorage.setItem('gaga-theme', theme.value) } catch { return }
+}
+const syncTheme = (event: StorageEvent) => {
+  if (event.key === 'gaga-theme' || event.key === null) applyTheme(event.newValue)
+}
+const activeLink = (to: string) => route.fullPath === to || (to === '/#work' && route.path.startsWith('/work/'))
 const open = ref(false)
 const hidden = ref(false)
 let previousScroll = 0
@@ -55,6 +71,9 @@ const startMotion = async () => {
 const removeStartHook = nuxtApp.hook('page:start', stopMotion)
 const removeTransitionHook = nuxtApp.hook('page:transition:finish', startMotion)
 onMounted(() => {
+  applyTheme(document.documentElement.dataset.theme || 'dark')
+  themeReady.value = true
+  window.addEventListener('storage', syncTheme)
   window.addEventListener('scroll', scroll, { passive: true })
   startMotion()
 })
@@ -66,6 +85,7 @@ useHead(() => ({ link: [{ rel: 'canonical', href: canonical.value }], script: [{
 useSeoMeta({ description: 'Big ideas, made real. GAGA TECH builds websites, web applications, and API integrations that make business easier. Based in Balikpapan.', ogSiteName: 'GAGA TECH', ogLocale: 'en_US', ogType: 'website', ogUrl: () => canonical.value, ogImage: () => new URL('/brand/LOGO-GAGATECH.png', config.public.siteUrl).href, twitterCard: 'summary_large_image' })
 watch(() => route.fullPath, () => { open.value = false })
 onBeforeUnmount(() => {
+  window.removeEventListener('storage', syncTheme)
   window.removeEventListener('scroll', scroll)
   stopMotion()
   removeStartHook()
@@ -77,15 +97,16 @@ onBeforeUnmount(() => {
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header wrap" :class="{ 'is-hidden': hidden && !open }">
       <NuxtLink to="/" class="brand" aria-label="GAGA TECH home"><UiLogoMark :size="220" /><span class="brand-tagline">INDEPENDENT<br>DIGITAL PARTNER</span></NuxtLink>
-      <nav class="desktop-nav" aria-label="Primary navigation"><NuxtLink v-for="link in links" :key="link.to" :to="link.to">{{ link.label }}</NuxtLink></nav>
+      <nav class="desktop-nav" aria-label="Primary navigation"><NuxtLink v-for="link in links" :key="link.to" :to="link.to" :aria-current="themeReady && activeLink(link.to) ? 'location' : 'false'">{{ link.label }}</NuxtLink></nav>
       <Button as-child variant="outline" class="nav-cta"><NuxtLink to="/#contact">Start a conversation <span>↗</span></NuxtLink></Button>
+      <Button variant="outline" class="theme-toggle" :disabled="!themeReady" :aria-label="theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'" :aria-pressed="theme === 'light'" @click="toggleTheme"><Sun v-if="theme === 'dark'" :size="18" aria-hidden="true" /><Moon v-else :size="18" aria-hidden="true" /></Button>
       <Sheet v-model:open="open">
         <SheetTrigger as-child><Button variant="ghost" class="menu-toggle" aria-label="Open menu">Menu +</Button></SheetTrigger>
         <SheetContent>
           <SheetTitle class="eyebrow pr-12">GAGA TECH / EXPLORE</SheetTitle>
           <SheetDescription class="sr-only">Explore our work, services, process, and contact options.</SheetDescription>
           <nav class="mobile-menu" aria-label="Mobile navigation">
-            <SheetClose v-for="(link, i) in links" :key="link.to" as-child><NuxtLink :to="link.to"><small>0{{ i + 1 }}</small>{{ link.label }} ↗</NuxtLink></SheetClose>
+            <SheetClose v-for="(link, i) in links" :key="link.to" as-child><NuxtLink :to="link.to" :aria-current="themeReady && activeLink(link.to) ? 'location' : 'false'"><small>0{{ i + 1 }}</small>{{ link.label }} ↗</NuxtLink></SheetClose>
             <SheetClose as-child><NuxtLink to="/#contact">Start a conversation ↗</NuxtLink></SheetClose>
             <p>Balikpapan, Indonesia<br>when technology makes things easier</p>
           </nav>

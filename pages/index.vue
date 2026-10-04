@@ -160,7 +160,7 @@ useSeoMeta({
 <template>
     <main id="main">
         <section class="hero wrap">
-            <UiTopoField mode="dark" :speed="0" :density="0.5" :opacity="0.25" />
+            <UiTopoField mode="auto" :speed="0" :density="0.5" :opacity="0.25" />
             <div class="hero-top mono">
                 <span
                     ><i class="status-dot" /> AVAILABLE FOR SELECT
@@ -182,7 +182,7 @@ useSeoMeta({
                         <em>real<span class="period">.</span></em>
                     </h1>
                     <div class="hero-bottom">
-                        <span class="hero-spark" aria-hidden="true"><img :src="'/brand/GAGATECH-just-logo-removebg.png'" alt="" /></span>
+                        <span class="hero-spark" aria-hidden="true">✳</span>
                         <div>
                             <p>
                                 We design websites and web applications that

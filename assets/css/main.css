@@ -14,7 +14,7 @@
     --accent-foreground: 0 0% 100%;
     --muted-foreground: 0 0% 65%;
     --input: 0 0% 30%;
-    --ring: 0 0% 65%;
+    --ring: 213 94% 68%;
     --scrollbar-thumb: #737373;
     --scrollbar-track: #141414;
     --bg: #0a0a0a;
@@ -22,6 +22,12 @@
     --accent: #a3a3a3;
     --mint: #ffffff;
     --line: rgba(255, 255, 255, 0.19);
+    --blue: #60a5fa;
+    --blue-foreground: #0a0a0a;
+    --blue-light: #1d4ed8;
+    --surface: #141414;
+    --secondary: #bdbdbd;
+    --logo-invert: 1;
     --gutter: clamp(20px, 4vw, 72px);
     background: var(--bg);
     color: var(--mint);
@@ -30,6 +36,51 @@
         "DM Sans Fallback: Arial",
         sans-serif;
     font-synthesis: none;
+}
+:root[data-theme="light"] {
+    color-scheme: light;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 4%;
+    --primary: 0 0% 4%;
+    --primary-foreground: 0 0% 100%;
+    --popover: 0 0% 96%;
+    --popover-foreground: 0 0% 4%;
+    --ui-accent: 0 0% 90%;
+    --accent-foreground: 0 0% 4%;
+    --muted-foreground: 0 0% 35%;
+    --input: 0 0% 60%;
+    --ring: 224 76% 48%;
+    --scrollbar-track: #f5f5f5;
+    --bg: #ffffff;
+    --mint: #0a0a0a;
+    --structure: #d4d4d4;
+    --accent: #595959;
+    --line: rgba(0, 0, 0, 0.19);
+    --blue: #1d4ed8;
+    --blue-foreground: #ffffff;
+    --surface: #f5f5f5;
+    --secondary: #525252;
+    --logo-invert: 0;
+}
+.theme-toggle {
+    min-width: 48px;
+    min-height: 44px;
+    padding: 8px;
+    flex-shrink: 0;
+}
+.theme-dark,
+:root[data-theme="light"] .theme-light {
+    display: none;
+}
+:root[data-theme="light"] .theme-dark {
+    display: inline;
+}
+.desktop-nav a[aria-current="location"],
+.mobile-menu a[aria-current="location"] {
+    text-decoration: underline;
+    text-decoration-color: var(--blue);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 7px;
 }
 * {
     box-sizing: border-box;
@@ -90,7 +141,7 @@ button:disabled {
     color: var(--bg);
 }
 :focus-visible {
-    outline: 2px solid currentColor;
+    outline: 2px solid var(--blue);
     outline-offset: 6px;
 }
 h1,
@@ -174,7 +225,7 @@ button {
     margin-bottom: 52px;
 }
 .section-heading > p {
-    color: #bdbdbd;
+    color: var(--secondary);
     font-size: 13px;
     max-width: 340px;
 }
@@ -198,8 +249,31 @@ button {
     background: var(--mint);
     color: var(--bg);
 }
-.button.mint:hover {
-    background: #dedede;
+.ui-solid:not(:disabled):is(:hover, :focus-visible),
+.button:is(.mint, .dark):not(:disabled):is(:hover, :focus-visible) {
+    background: var(--blue);
+    color: var(--blue-foreground);
+}
+.ui-solid:not(:disabled):active,
+.button:is(.mint, .dark):not(:disabled):active {
+    background: color-mix(in srgb, var(--blue) 85%, var(--blue-foreground));
+    color: var(--blue-foreground);
+}
+.ui-soft:not(:disabled):is(:hover, :focus-visible, [data-state="open"]),
+.services-list summary:is(:hover, :focus-visible) {
+    background: color-mix(in srgb, var(--blue) 8%, transparent);
+    border-color: var(--blue);
+    color: var(--blue);
+}
+.ui-soft:not(:disabled):active,
+.services-list summary:active {
+    background: color-mix(in srgb, var(--blue) 16%, transparent);
+    border-color: var(--blue);
+    color: var(--blue);
+}
+.ui-field:not(:disabled):is(:hover, :focus),
+.field select:not(:disabled):is(:hover, :focus, :active) {
+    border-color: var(--blue);
 }
 .button.dark {
     background: var(--bg);
@@ -248,9 +322,14 @@ button {
     font-size: 12px;
     gap: 32px;
 }
-.desktop-nav a:hover,
-.footer a:hover {
-    color: var(--mint);
+:is(.desktop-nav a, .mobile-menu > a, .text-link, .hero-baseline a, .service-detail > a, .pricing-scroll a, .faq-section > div > p a, .contact-links a, .case-back, .ui-link):is(:hover, :focus-visible, :active) {
+    color: var(--blue);
+    border-color: var(--blue);
+    text-decoration: underline;
+    text-underline-offset: 5px;
+}
+:is(.desktop-nav a, .mobile-menu > a, .text-link, .hero-baseline a, .service-detail > a, .pricing-scroll a, .faq-section > div > p a, .contact-links a, .case-back, .ui-link):active {
+    text-decoration-thickness: 2px;
 }
 .nav-cta {
     border: 1px solid var(--line);
@@ -329,7 +408,7 @@ button {
     line-height: 0.97;
 }
 .hero h1 em {
-    color: var(--mint);
+    color: var(--blue);
 }
 .period {
     color: var(--accent);
@@ -349,7 +428,7 @@ button {
     height: 1em;
     max-width: none;
     object-fit: contain;
-    filter: invert(1);
+    filter: invert(var(--logo-invert));
 }
 .hero-bottom p {
     color: #b2b2b2;
@@ -440,7 +519,7 @@ button {
     margin-top: 38px;
 }
 .intro-bottom p {
-    color: #bdbdbd;
+    color: var(--secondary);
     font-size: 13px;
 }
 .example-note {
@@ -465,14 +544,17 @@ button {
 .filter-tabs button {
     border: 1px solid transparent;
     border-radius: 3px;
-    color: #b7b7b7;
+    color: var(--secondary);
     font-size: 11px;
     padding: 9px 15px;
 }
-.filter-tabs button.active {
-    background: #4040402f;
-    border-color: var(--line);
-    color: var(--mint);
+.filter-tabs button:is(.active, [aria-pressed="true"]) {
+    background: color-mix(in srgb, var(--blue) 8%, transparent);
+    border-color: var(--blue);
+    color: var(--blue);
+}
+.filter-tabs button:not(:disabled):active {
+    background: color-mix(in srgb, var(--blue) 16%, transparent);
 }
 .filter-tabs small {
     margin-left: 8px;
@@ -1031,7 +1113,25 @@ button {
     text-decoration: underline;
 }
 .services-section {
-    background: #141414;
+    background: var(--surface);
+}
+:root[data-theme="light"] :is(.hero-top, .hero-eyebrow, .hero-bottom p, .hero-baseline p, .project-index, .project-meta p, .project-todo, .service-number, .service-detail > .mono, .service-detail p, .service-detail ul, .process-number, .standards-grid .mono, .pricing-scroll thead th:first-child, .pricing-scroll .mono, .pricing-scroll thead p, .pricing-scroll tbody td, .pricing-note, .footer-top p, .footer-bottom, .case-header > p, .case-disclaimer p, .case-story li, .case-story p, .mobile-menu > .eyebrow, .section-heading h2 > span) {
+    color: var(--secondary);
+}
+.project-visual {
+    --mint: #ffffff;
+    --bg: #0a0a0a;
+    color: #ffffff;
+}
+.project-card:is(:hover, :focus-visible, :active) .project-open {
+    color: var(--blue-foreground);
+    background: var(--blue);
+}
+.project-card:is(:hover, :focus-visible, :active) .project-meta h3 {
+    color: var(--blue);
+}
+.project-card:active .project-open {
+    background: color-mix(in srgb, var(--blue) 85%, var(--blue-foreground));
 }
 .services-list {
     border-top: 1px solid var(--line);
@@ -1115,7 +1215,7 @@ details[open] > summary .service-plus {
     margin-bottom: 12px;
 }
 .process-grid p {
-    color: #bdbdbd;
+    color: var(--secondary);
     font-size: 12px;
     max-width: 280px;
 }
@@ -1146,7 +1246,7 @@ details[open] > summary .service-plus {
     margin: 15px 0;
 }
 .standards-grid p {
-    color: #bdbdbd;
+    color: var(--secondary);
     font-size: 12px;
 }
 .pricing-scroll {
@@ -1216,7 +1316,7 @@ details[open] > summary .service-plus {
     line-height: 0.7;
 }
 .testimonial-copy p {
-    color: #bdbdbd;
+    color: var(--secondary);
     font-size: 14px;
     margin: 28px 0;
     max-width: 520px;
@@ -1233,7 +1333,7 @@ details[open] > summary .service-plus {
     grid-template-columns: 1fr 1.25fr;
 }
 .faq-section > div > p {
-    color: #bdbdbd;
+    color: var(--secondary);
     font-size: 12px;
     margin-top: 25px;
 }
@@ -1257,11 +1357,14 @@ details[open] > summary .service-plus {
     opacity: 0.6;
 }
 .faq-list p {
-    color: #bdbdbd;
+    color: var(--secondary);
     font-size: 12px;
     padding: 0 26px 25px;
 }
 .contact-section {
+    --mint: #ffffff;
+    --bg: #0a0a0a;
+    --structure: #303030;
     --background: 0 0% 100%;
     --foreground: 0 0% 4%;
     --primary: 0 0% 4%;
@@ -1270,7 +1373,9 @@ details[open] > summary .service-plus {
     --accent-foreground: 0 0% 4%;
     --muted-foreground: 0 0% 35%;
     --input: 0 0% 60%;
-    --ring: 0 0% 25%;
+    --ring: 224 76% 48%;
+    --blue: var(--blue-light);
+    --blue-foreground: #ffffff;
     background: var(--mint);
     color: var(--bg);
     color-scheme: light;
@@ -1380,7 +1485,7 @@ details[open] > summary .service-plus {
     line-height: 1.6;
 }
 .consent input {
-    accent-color: var(--structure);
+    accent-color: var(--blue);
     flex-shrink: 0;
     height: 15px;
     margin-top: 3px;
@@ -1460,9 +1565,13 @@ details[open] > summary .service-plus {
     right: calc(25px + env(safe-area-inset-right, 0px));
     z-index: 30;
 }
-.floating-wa:hover {
-    background: var(--bg);
-    border-color: currentColor;
+.floating-wa:is(:hover, :focus-visible, :active) {
+    background: var(--blue);
+    color: var(--blue-foreground);
+    border-color: var(--blue);
+}
+.floating-wa:active {
+    background: color-mix(in srgb, var(--blue) 85%, var(--blue-foreground));
 }
 .floating-wa svg {
     flex: 0 0 24px;
@@ -1471,7 +1580,7 @@ details[open] > summary .service-plus {
 }
 .custom-cursor {
     align-items: center;
-    border: 1px solid var(--mint);
+    border: 1px solid var(--blue);
     border-radius: 50%;
     display: none;
     font-size: 10px;
@@ -1496,8 +1605,8 @@ details[open] > summary .service-plus {
     width: 30px;
 }
 .custom-cursor.is-project {
-    background: var(--mint);
-    color: var(--bg);
+    background: var(--blue);
+    color: var(--blue-foreground);
     height: 70px;
     left: -35px;
     top: -35px;
@@ -1644,7 +1753,16 @@ details[open] > summary .service-plus {
         display: none;
     }
     .desktop-nav {
-        gap: 22px;
+        gap: 16px;
+    }
+    .site-header {
+        gap: 10px;
+    }
+    .nav-cta {
+        padding-inline: 10px;
+    }
+    .nav-cta span {
+        margin-left: 0;
     }
     .hero-main {
         min-height: 580px;
@@ -1733,7 +1851,7 @@ details[open] > summary .service-plus {
         height: 80px;
     }
     .brand .logo-frame {
-        width: 180px !important;
+        width: clamp(130px, 40vw, 180px) !important;
     }
     .desktop-nav,
     .nav-cta {
@@ -1769,7 +1887,7 @@ details[open] > summary .service-plus {
         margin-right: 20px;
     }
     .mobile-menu p {
-        color: #bdbdbd;
+        color: var(--secondary);
         font-size: 11px;
         margin-top: 30px;
     }
@@ -2290,7 +2408,6 @@ details[open] > summary .service-plus {
     }
     .project-card:is(:hover, :focus-visible) .project-open {
         translate: 2px -2px;
-        background: var(--structure);
     }
     .project-card:focus-visible .project-visual {
         transform: scale(1.03);

@@ -20,6 +20,6 @@ withDefaults(defineProps<{ size?: number }>(), { size: 132 });
     display: block;
     width: 100%;
     height: auto;
-    filter: invert(1);
+    filter: invert(var(--logo-invert));
 }
 </style>

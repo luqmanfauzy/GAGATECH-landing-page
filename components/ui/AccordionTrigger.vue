@@ -12,7 +12,7 @@ const delegated = reactiveOmit(props, 'class')
 
 <template>
   <AccordionHeader class="flex">
-    <AccordionTrigger v-bind="delegated" :class="cn('flex flex-1 items-center justify-between gap-4 py-6 text-left text-sm font-medium hover:underline [&[data-state=open]>svg]:rotate-180', props.class)">
+    <AccordionTrigger v-bind="delegated" :class="cn('ui-soft flex flex-1 items-center justify-between gap-4 py-6 text-left text-sm font-medium hover:underline [&[data-state=open]>svg]:rotate-180', props.class)">
       <slot />
       <ChevronDown class="h-4 w-4 shrink-0 text-muted-foreground transition-transform motion-reduce:transition-none" aria-hidden="true" />
     </AccordionTrigger>

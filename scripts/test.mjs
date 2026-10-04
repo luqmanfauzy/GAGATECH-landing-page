@@ -84,7 +84,7 @@ const shellCss =
   css.slice(0, css.indexOf(".catalog-art,")) +
   css.slice(css.indexOf(".empty-state {"));
 for (const source of [
-  shellCss.replace(/\.project-visual \{[^}]*\}/, ""),
+  shellCss.replace(/\.project-visual \{[^}]*\}/g, "").replace(/--blue(?:-light)?: #[\da-f]{6};/g, ""),
   footer,
   topo,
   dot,
@@ -105,6 +105,29 @@ assert.match(topo, /vec3 brand = vec3\(10\.0\) \/ 255\.0;/);
 assert.match(dot, /rgba\(255,255,255,/);
 assert.match(config, /name: 'theme-color', content: '#0a0a0a'/);
 console.log("Palette and responsive gutter checks passed");
+const startup = config.match(/innerHTML: "([^"]+)"/)[1];
+for (const stored of [null, 'dark', 'light', 'invalid']) {
+  const document = { documentElement: { dataset: {} } };
+  new Function('document', 'localStorage', startup)(document, { getItem: () => stored });
+  assert.equal(document.documentElement.dataset.theme, stored === 'light' ? 'light' : 'dark');
+}
+const blocked = { documentElement: { dataset: {} } };
+new Function('document', 'localStorage', startup)(blocked, { getItem() { throw new Error('Blocked'); } });
+assert.equal(blocked.documentElement.dataset.theme, 'dark');
+const luminance = hex => hex.match(/[\da-f]{2}/gi).map(value => {
+  const channel = parseInt(value, 16) / 255;
+  return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+}).reduce((sum, channel, i) => sum + channel * [0.2126, 0.7152, 0.0722][i], 0);
+for (const [blue, surface] of [['60a5fa', '0a0a0a'], ['60a5fa', '141414'], ['1d4ed8', 'ffffff'], ['1d4ed8', 'f5f5f5']]) {
+  const values = [luminance(blue), luminance(surface)].sort((a, b) => b - a);
+  assert.ok((values[0] + 0.05) / (values[1] + 0.05) >= 4.5, `Blue contrast: ${blue} on ${surface}`);
+}
+assert.match(css, /--blue: #60a5fa;/);
+assert.match(css, /--blue: #1d4ed8;/);
+assert.match(css, /:focus-visible\s*\{[^}]*outline: 2px solid var\(--blue\)/);
+assert.match(css, /\.contact-section\s*\{[^}]*--blue: var\(--blue-light\)/);
+assert.doesNotMatch(css, /(?:^|\n)a:hover\s*\{/);
+console.log('Theme startup: saved preference, dark default, invalid and blocked storage passed');
 
 const logo = await readFile(
   new URL("../components/ui/LogoMark.vue", import.meta.url),
